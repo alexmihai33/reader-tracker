@@ -63,11 +63,15 @@ class _BookDetailsScrenState extends State<BookDetailsScren> {
                         : ElevatedButton.icon(
                             onPressed: () async {
                               try {
+                                book.isFavorite = !book.isFavorite;
                                 await DatabaseHelper.instance
                                     .toggleFavoriteStatus(
                                       book.id,
                                       book.isFavorite,
                                     );
+                                    setState(() {
+                                      
+                                    });
                                 SnackBar snackBar = const SnackBar(
                                   content: Text("Added to Favorite"),
                                 );
@@ -78,8 +82,13 @@ class _BookDetailsScrenState extends State<BookDetailsScren> {
                                 print(e);
                               }
                             },
-                            label: Text("Favorite"),
-                            icon: Icon(Icons.favorite),
+                            icon: Icon(
+                                book.isFavorite
+                                    ? Icons.favorite
+                                    : Icons.favorite_outline,
+                                color: book.isFavorite ? Colors.red : null,
+                              ),
+                              label: Text(book.isFavorite ? "Favorite" : "Add to Favorites"),
                           ),
                   ),
                   //     !isFromSavedScreen ? ElevatedButton(

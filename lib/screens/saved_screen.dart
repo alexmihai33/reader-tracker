@@ -22,21 +22,26 @@ class _SavedScreenState extends State<SavedScreen> {
                 itemBuilder: (context, index) {
                   Book book = snapshot.data![index];
                   return InkWell(
-                    onTap: (){
+                    onTap: () {
                       Navigator.pushNamed(
-                        context, '/details',
-                        arguments: BookDetailsArguments(itemBook: book, isFromSavedScreen: true));
+                        context,
+                        '/details',
+                        arguments: BookDetailsArguments(
+                          itemBook: book,
+                          isFromSavedScreen: true,
+                        ),
+                      );
                     },
                     child: Card(
                       child: ListTile(
                         title: Text(book.title),
-                        trailing: IconButton(onPressed: () async { 
-                          await DatabaseHelper.instance.deleteBook(book.id);
-                          setState(() {
-                                
-                          });
-                        },
-                        icon: Icon(Icons.delete)),
+                        trailing: IconButton(
+                          onPressed: () async {
+                            await DatabaseHelper.instance.deleteBook(book.id);
+                            setState(() {});
+                          },
+                          icon: Icon(Icons.delete),
+                        ),
                         leading: Image.network(
                           book.imageLinks['thumbnail'] ?? '',
                           fit: BoxFit.cover,
@@ -46,11 +51,15 @@ class _SavedScreenState extends State<SavedScreen> {
                             Text(book.authors.join(", & ")),
                             ElevatedButton.icon(
                               onPressed: () async {
+                                book.isFavorite = !book.isFavorite;
                                 await DatabaseHelper.instance
                                     .toggleFavoriteStatus(
                                       book.id,
-                                      !book.isFavorite,
+                                      book.isFavorite,
                                     );
+                                    setState(() {
+                                      
+                                    });
                                 SnackBar snackBar = const SnackBar(
                                   content: Text("Added to Favorite"),
                                 );
@@ -58,8 +67,13 @@ class _SavedScreenState extends State<SavedScreen> {
                                   context,
                                 ).showSnackBar(snackBar);
                               },
-                              icon: Icon(Icons.favorite),
-                              label: Text("Add to Favorites"),
+                              icon: Icon(
+                                book.isFavorite
+                                    ? Icons.favorite
+                                    : Icons.favorite_outline,
+                                color: book.isFavorite ? Colors.red : null,
+                              ),
+                              label: Text(book.isFavorite ? "Favorite" : "Add to Favorites"),
                             ),
                           ],
                         ),
