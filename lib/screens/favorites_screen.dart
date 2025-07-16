@@ -23,8 +23,10 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                   return Card(
                     child: ListTile(
                       title: Text(book.title),
-                      leading: Image.network(book.imageLinks['thumbnail']??'',
-                      fit: BoxFit.cover),
+                      leading: Image.network(
+                        book.imageLinks['thumbnail'] ?? '',
+                        fit: BoxFit.cover,
+                      ),
                       trailing: const Icon(Icons.favorite, color: Colors.red),
                     ),
                   );
