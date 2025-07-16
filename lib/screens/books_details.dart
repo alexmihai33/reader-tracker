@@ -17,6 +17,7 @@ class _BookDetailsScrenState extends State<BookDetailsScren> {
     final args =
         ModalRoute.of(context)?.settings.arguments as BookDetailsArguments;
     final Book book = args.itemBook;
+    final bool isFromSavedScreen = args.isFromSavedScreen;
     final theme = Theme.of(context).textTheme;
 
     return Scaffold(
@@ -40,10 +41,11 @@ class _BookDetailsScrenState extends State<BookDetailsScren> {
                   ),
                   Text('Page count: ${book.pageCount}', style: theme.bodySmall),
                   Text('Language: ${book.language}', style: theme.bodySmall),
+                  SizedBox(height: 10),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: !isFromSavedScreen ? MainAxisAlignment.spaceEvenly : MainAxisAlignment.center,
                     children: [
-                      ElevatedButton(
+                      !isFromSavedScreen ? ElevatedButton(
                         onPressed: () async {
                           try {
                             await DatabaseHelper.instance.insert(
@@ -60,7 +62,7 @@ class _BookDetailsScrenState extends State<BookDetailsScren> {
                           }
                         },
                         child: Text("Save"),
-                      ),
+                      ) : const SizedBox(),
                       ElevatedButton.icon(
                         onPressed: () async {
                           try{

@@ -35,7 +35,7 @@ class BooksGridView extends StatelessWidget {
                 onTap: () {
                   Navigator.pushNamed(
                     context, '/details', 
-                    arguments: BookDetailsArguments(itemBook: book));
+                    arguments: BookDetailsArguments(itemBook: book, isFromSavedScreen: false));
                 },
                 child: Column(
                   children: [

@@ -23,7 +23,9 @@ class _SavedScreenState extends State<SavedScreen> {
                   Book book = snapshot.data![index];
                   return InkWell(
                     onTap: (){
-                      Navigator.pushNamed(context, '/details',arguments: BookDetailsArguments(itemBook: book));
+                      Navigator.pushNamed(
+                        context, '/details',
+                        arguments: BookDetailsArguments(itemBook: book, isFromSavedScreen: true));
                     },
                     child: Card(
                       child: ListTile(
