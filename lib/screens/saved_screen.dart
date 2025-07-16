@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:reader_tracker/db/database_helper.dart';
 import 'package:reader_tracker/models/book.dart';
+import 'package:reader_tracker/utils/book_details_arguments.dart';
 
 class SavedScreen extends StatefulWidget {
   const SavedScreen({super.key});
@@ -20,41 +21,46 @@ class _SavedScreenState extends State<SavedScreen> {
                 itemCount: snapshot.data?.length,
                 itemBuilder: (context, index) {
                   Book book = snapshot.data![index];
-                  return Card(
-                    child: ListTile(
-                      title: Text(book.title),
-                      trailing: IconButton(onPressed: () async { 
-                        await DatabaseHelper.instance.deleteBook(book.id);
-                        setState(() {
-            
-                        });
-                      },
-                      icon: Icon(Icons.delete)),
-                      leading: Image.network(
-                        book.imageLinks['thumbnail'] ?? '',
-                        fit: BoxFit.cover,
-                      ),
-                      subtitle: Column(
-                        children: [
-                          Text(book.authors.join(", & ")),
-                          ElevatedButton.icon(
-                            onPressed: () async {
-                              await DatabaseHelper.instance
-                                  .toggleFavoriteStatus(
-                                    book.id,
-                                    book.isFavorite,
-                                  );
-                              SnackBar snackBar = const SnackBar(
-                                content: Text("Added to Favorite"),
-                              );
-                              ScaffoldMessenger.of(
-                                context,
-                              ).showSnackBar(snackBar);
-                            },
-                            icon: Icon(Icons.favorite),
-                            label: Text("Add to Favorites"),
-                          ),
-                        ],
+                  return InkWell(
+                    onTap: (){
+                      Navigator.pushNamed(context, '/details',arguments: BookDetailsArguments(itemBook: book));
+                    },
+                    child: Card(
+                      child: ListTile(
+                        title: Text(book.title),
+                        trailing: IconButton(onPressed: () async { 
+                          await DatabaseHelper.instance.deleteBook(book.id);
+                          setState(() {
+                                
+                          });
+                        },
+                        icon: Icon(Icons.delete)),
+                        leading: Image.network(
+                          book.imageLinks['thumbnail'] ?? '',
+                          fit: BoxFit.cover,
+                        ),
+                        subtitle: Column(
+                          children: [
+                            Text(book.authors.join(", & ")),
+                            ElevatedButton.icon(
+                              onPressed: () async {
+                                await DatabaseHelper.instance
+                                    .toggleFavoriteStatus(
+                                      book.id,
+                                      !book.isFavorite,
+                                    );
+                                SnackBar snackBar = const SnackBar(
+                                  content: Text("Added to Favorite"),
+                                );
+                                ScaffoldMessenger.of(
+                                  context,
+                                ).showSnackBar(snackBar);
+                              },
+                              icon: Icon(Icons.favorite),
+                              label: Text("Add to Favorites"),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   );
